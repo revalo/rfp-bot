@@ -1,3 +1,5 @@
 *.pyc
 *.exe
 secret.py
+*.log
+keys.json

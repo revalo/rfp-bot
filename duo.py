@@ -5,26 +5,28 @@ import json
 import sys
 from urllib2 import unquote
 
-if len(sys.argv) < 2:
-    print "Usage: python duo_bypass.py <url to duo qr>"; exit()
 
-qr_url = sys.argv[1]
-data = unquote(qr_url.split('=')[1])
+if __name__ == '__main__':
+	if len(sys.argv) < 2:
+	    print "Usage: python duo_bypass.py <url to duo qr>"; exit()
 
-hostb64 = data.split('-')[1]
+	qr_url = sys.argv[1]
+	data = unquote(qr_url.split('=')[1])
 
-host = base64.b64decode(hostb64 + '='*(-len(hostb64) % 4))
-code = data.split('-')[0].replace('duo://', '')
+	hostb64 = data.split('-')[1]
 
-url = 'https://{host}/push/v2/activation/{code}'.format(host=host, code=code)
-r = requests.post(url)
-response = json.loads(r.text)
+	host = base64.b64decode(hostb64 + '='*(-len(hostb64) % 4))
+	code = data.split('-')[0].replace('duo://', '')
 
-secret = base64.b32encode(response['response']['hotp_secret'])
-print "HOTP Secret:", secret
+	url = 'https://{host}/push/v2/activation/{code}'.format(host=host, code=code)
+	r = requests.post(url)
+	response = json.loads(r.text)
 
-print "10 Next OneTime Passwords!"
-# Generate 10 Otps!
-hotp = pyotp.HOTP(secret)
-for _ in xrange(10):
-    print hotp.at(_)
+	secret = base64.b32encode(response['response']['hotp_secret'])
+	print "HOTP Secret:", secret
+
+	print "10 Next OneTime Passwords!"
+	# Generate 10 Otps!
+	hotp = pyotp.HOTP(secret)
+	for _ in xrange(10):
+	    print hotp.at(_)
