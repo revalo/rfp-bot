@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import pyotp
 import time
 
-def submit_rfp(kerb_user, kerb_password, duo_secret, duo_count, rfp_name, items):
+def submit_rfp(kerb_user, kerb_password, duo_secret, duo_count, rfp_name, cost_object, gl_number, items):
 	driver = webdriver.Chrome()
 	main_window = driver.current_window_handle
 
@@ -43,6 +43,24 @@ def submit_rfp(kerb_user, kerb_password, duo_secret, duo_count, rfp_name, items)
 	rfp_name_box = driver.find_element_by_name("rfpDocument.shortDescription")
 	rfp_name_box.clear(); rfp_name_box.send_keys(rfp_name)
 	driver.implicitly_wait(0)
+
+	# Create lines
+	for _ in xrange(len(items) - 1):
+		driver.find_element_by_id('addLine').click()
+
+	# Fill lines
+	for index, item in enumerate(items):
+		date_box = driver.find_element_by_name('rfpDocument.lineItems[%i].serviceDate' % index)
+		account_box = driver.find_element_by_name('rfpDocument.lineItems[%i].glAccount.glAccountNumber' % index)
+		cost_object_box = driver.find_element_by_name('rfpDocument.lineItems[%i].costObject.costObjectNumber' % index)
+		amount_box = driver.find_element_by_name('rfpDocument.lineItems[%i].amount' % index)
+		notes_box = driver.find_element_by_name('rfpDocument.lineItems[%i].explanation' % index)
+
+		date_box.send_keys(item.date.strftime("%m/%d/%Y"))
+		account_box.send_keys(gl_number)
+		cost_object_box.send_keys(cost_object)
+		amount_box.send_keys(str(item.get_amount()))
+		notes_box.send_keys(item.notes)
 
 	time.sleep(100) # Debug
 	driver.close()
