@@ -4,7 +4,7 @@ import invoice2data.in_pdftotext as pdftotext
 
 class Receipt(object):
 
-	def __init__(self, date, amount, filename, notes='', tax=0):
+	def __init__(self, date, amount, filename, notes, tax=0):
 		self.date = date
 		self.amount = amount
 		self.tax = tax

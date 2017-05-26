@@ -18,7 +18,8 @@ if __name__ == '__main__':
 		db.update({'count': c+1}, Duos.secret == DUO_SECRET)
 
 	receipts = [
-		Receipt(date=date(2017, 3, 26), amount=9.50, filename="D:/Documents/MIT/ProjX/Receipts/amazon.pdf")
+		Receipt(date=date(2017, 3, 26), amount=9.50, notes='Amazon', filename="D:/Documents/MIT/ProjX/Receipts/amazon.pdf"),
+		Receipt(date=date(2017, 3, 26), amount=9.50, notes='Amazon', filename="D:/Documents/MIT/ProjX/Receipts/amazon.pdf")
 	]
 
-	submit_rfp(USERNAME, PASSWORD, DUO_SECRET, c, 'Test RFP', '2859935', '420319', receipts)
+	submit_rfp(USERNAME, PASSWORD, DUO_SECRET, c, 'Test RFP', '2859935', '420319', 'Shreyas Kapur', receipts)

@@ -1,6 +1,8 @@
 *.pyc
 *.exe
+*.dll
 secret.py
 *.log
 keys.json
 *.csv
+*.pdf
